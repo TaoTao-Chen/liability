@@ -3,11 +3,12 @@ import { getAllPostIds, getPostData } from "../../lib/posts";
 import Head from "next/head";
 import { parseISO, format } from "date-fns";
 import Date from "../../components/date";
-import utilStyles from '../../styles/utils.module.css'
+import utilStyles from "../../styles/utils.module.css";
+import { GetStaticProps, GetStaticPaths, GetServerSideProps } from "next";
 
 export default function Post({ postData }) {
   return (
-    <Layout>
+    <Layout home>
       <Head>
         <title>{postData.title}</title>
       </Head>
@@ -19,21 +20,21 @@ export default function Post({ postData }) {
         <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
       </article>
     </Layout>
-  )
+  );
 }
 
 //getStaticProps and getStaticPaths runs only on the server-side. It will never be run on the client-side
 
-export async function getStaticPaths() {
+export const getStaticPaths = async () => {
   const paths = getAllPostIds();
   return {
     paths,
-    fallback: true,
+    fallback: false,
   };
   // Return a list of possible value for id
-}
+};
 
-export async function getStaticProps({ params }) {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const postData = await getPostData(params.id);
   return {
     props: {
@@ -41,4 +42,4 @@ export async function getStaticProps({ params }) {
     },
   };
   // Fetch necessary data for the blog post using params.id
-}
+};

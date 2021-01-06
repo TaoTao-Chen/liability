@@ -28,7 +28,7 @@ export function getSortedPostsData() {
   });
   // Sort posts by date
   return allPostsData.sort((a, b) => {
-    if (a.date < b.date) {
+    if (a["date"] < b["date"]) {
       return 1;
     } else {
       return -1;
@@ -37,7 +37,7 @@ export function getSortedPostsData() {
 }
 
 export function getAllPostIds() {
-    debugger
+  debugger;
   const fileNames = fs.readdirSync(postsDirectory);
 
   // Returns an array that looks like this:
@@ -63,18 +63,20 @@ export function getAllPostIds() {
 }
 
 export async function getPostData(id) {
-    debugger
-    const fullPath = path.join(postsDirectory, `${id}.md`)
-    const fileContents = fs.readFileSync(fullPath, 'utf8')
-  
-    // Use gray-matter to parse the post metadata section
-    const matterResult = matter(fileContents)
-    const processedContent = await remark().use(html).process(matterResult.content)
-    const contentHtml = processedContent.toString()
-    // Combine the data with the id
-    return {
-      id,
-      contentHtml,
-      ...matterResult.data
-    }
-  }
+  debugger;
+  const fullPath = path.join(postsDirectory, `${id}.md`);
+  const fileContents = fs.readFileSync(fullPath, "utf8");
+
+  // Use gray-matter to parse the post metadata section
+  const matterResult = matter(fileContents);
+  const processedContent = await remark()
+    .use(html)
+    .process(matterResult.content);
+  const contentHtml = processedContent.toString();
+  // Combine the data with the id
+  return {
+    id,
+    contentHtml,
+    ...matterResult.data,
+  };
+}
